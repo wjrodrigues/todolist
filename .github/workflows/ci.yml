@@ -18,7 +18,9 @@ jobs:
           cp docker/.env-example docker/.env
 
       - name: Run docker
-        run: docker-compose -f docker/docker-compose.yml up -d --build
+        run: |
+          docker network create todolist || true
+          docker-compose -f docker/docker-compose.yml up -d --build
 
       - name: Install dependencies
         run: docker exec todolist-api sh -c "go mod download && go mod verify && go mod tidy"
