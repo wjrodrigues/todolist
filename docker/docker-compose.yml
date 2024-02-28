@@ -1,0 +1,51 @@
+version: "3.9"
+services:
+  todolist-api:
+    build:
+      context: ./build
+      dockerfile: Dockerfile
+    container_name: todolist-api
+    restart: always
+    tty: true
+    working_dir: /app
+    environment:
+      DB_USER: $DB_USER
+      DB_PASSWORD: $DB_PASSWORD
+      DB_NAME: $DB_NAME
+      DB_PORT: $DB_PORT
+      DB_HOST: $DB_HOST
+    mem_limit: 1024m
+    cpus: 1.0
+    volumes:
+      - ../:/app
+    ports:
+      - $APP_HOST:$APP_HOST
+    networks:
+      - todolist
+    depends_on:
+      todolist-db:
+        condition: service_healthy
+
+  todolist-db:
+    image: postgres:15-alpine
+    container_name: todolist-db
+    restart: always
+    environment:
+      POSTGRES_USER: $DB_USER
+      POSTGRES_PASSWORD: $DB_PASSWORD
+      POSTGRES_DB: $DB_NAME
+    mem_limit: 1024m
+    cpus: 0.5
+    volumes:
+      - /tmp/todolist:/var/lib/postgresql/data
+      - ./build/database/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
+    ports:
+      - $DB_PORT:$DB_PORT
+    networks:
+      - todolist
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+
+networks:
+  todolist:
+    external: true
