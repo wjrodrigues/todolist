@@ -1,0 +1,33 @@
+name: ToDoList - CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Copy env's
+        run: |
+          cp docker/.env-example docker/.env
+
+      - name: Run docker
+        run: docker-compose -f docker/docker-compose.yml up -d --build
+
+      - name: Install dependencies
+        run: docker exec todolist-api sh -c "go mod download && go mod verify && go mod tidy"
+
+      - name: Permissions
+        run: docker exec todolist-api sh -c "chmod 777 -R /app"
+
+      - name: Run test
+        run: docker exec -u dev todolist-api sh -c "go test ./... -cover -v -coverprofile cover.out"
+
+      - name: Coverage
+        run: docker exec todolist-api sh docker/ci/cover.sh
