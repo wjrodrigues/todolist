@@ -5,21 +5,21 @@ import (
 	"todolist/pkg/security"
 )
 
-type UserInstance struct {
+type User struct {
 	ID       entity.ID
 	Name     string
 	Email    string
 	Password string
 }
 
-func NewUser(name, email, password string) (*UserInstance, error) {
+func NewUser(name, email, password string) (*User, error) {
 	hash, err := security.GenerateFromPassword(password)
 
 	if err != nil {
-		return &UserInstance{}, err
+		return &User{}, err
 	}
 
-	return &UserInstance{
+	return &User{
 		ID:       entity.NewID(),
 		Name:     name,
 		Email:    email,
