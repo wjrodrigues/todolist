@@ -5,7 +5,7 @@ import (
 	"todolist/pkg/entity"
 )
 
-type ItemInstance struct {
+type Item struct {
 	ID          entity.ID
 	Title       string
 	Description string
@@ -14,8 +14,8 @@ type ItemInstance struct {
 	UpdatedAt   time.Time
 }
 
-func NewItem(title, description, status string) *ItemInstance {
-	return &ItemInstance{
+func NewItem(title, description, status string) *Item {
+	return &Item{
 		ID:          entity.NewID(),
 		Title:       title,
 		Description: description,
