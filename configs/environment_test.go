@@ -5,8 +5,6 @@ import (
 	"todolist/pkg/test"
 
 	"github.com/stretchr/testify/assert"
-
-	_ "github.com/lib/pq"
 )
 
 func TestFileExists(t *testing.T) {
