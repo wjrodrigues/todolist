@@ -24,6 +24,7 @@ jobs:
           docker-compose -f docker/docker-compose.yml up -d --build
 
       - name: Run migrations
+        run: |
           docker exec todolist-migrate sh -c 'migrate -path ./migrations -database "postgresql://$${DB_USER}:$${DB_PASSWORD}@$${DB_HOST}:$${DB_PORT}/$${DB_NAME}?sslmode=disable" -verbose up'
 
       - name: Install dependencies
