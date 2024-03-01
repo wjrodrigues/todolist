@@ -1,7 +1,7 @@
 pwd := $(shell pwd)
 
-.SILENT: infra api start
-.PHONY: infra api start
+.SILENT: infra api start cover
+.PHONY: infra api start cover
 
 infra:
 	docker network create todolist || true
@@ -12,6 +12,10 @@ infra:
 api:
 	cp ${pwd}/.env-example .env
 	echo "Finish ✅"
+
+cover:
+	docker exec -u dev todolist-api sh -c "go test ./... -cover -coverprofile cover.out"
+	docker exec todolist-api sh docker/ci/cover.sh
 
 start:
 	make infra

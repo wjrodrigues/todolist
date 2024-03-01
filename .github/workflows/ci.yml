@@ -16,6 +16,7 @@ jobs:
       - name: Copy env's
         run: |
           cp docker/.env-example docker/.env
+          cp .env-example .env
 
       - name: Run docker
         run: |
