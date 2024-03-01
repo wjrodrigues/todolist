@@ -46,6 +46,24 @@ services:
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
 
+  todolist-migrate:
+    image: migrate/migrate
+    container_name: todolist-migrate
+    environment:
+      DB_USER: $DB_USER
+      DB_PASSWORD: $DB_PASSWORD
+      DB_NAME: $DB_NAME
+      DB_PORT: $DB_PORT
+      DB_HOST: $DB_HOST
+    tty: true
+    entrypoint: sh
+    networks:
+      - todolist
+    mem_limit: 128m
+    cpus: 0.5
+    volumes:
+      - ../database/migrations:/migrations
+
 networks:
   todolist:
     external: true
