@@ -1,7 +1,7 @@
 pwd := $(shell pwd)
 
-.SILENT: infra api start cover migrate-up
-.PHONY: infra api start cover migrate-up
+.SILENT: infra api start cover migrate-up migrate-down cover-html
+.PHONY: infra api start cover migrate-up migrate-down cover-html
 
 infra:
 	docker network create todolist || true
@@ -16,6 +16,10 @@ api:
 cover:
 	docker exec -u dev todolist-api sh -c "go test ./... -cover -coverprofile cover.out"
 	docker exec todolist-api sh docker/ci/cover.sh
+
+cover-html:
+	docker exec -u dev todolist-api sh -c "go test ./... -cover -coverprofile cover.out"
+	docker exec todolist-api sh -c "go tool cover -html=cover.out -o coverage/index.html"
 
 migrate-up:
 	echo "Migrate up dev 🛠️"
@@ -38,3 +42,4 @@ migrate-down:
 start:
 	make infra
 	make api
+	make migrate-up

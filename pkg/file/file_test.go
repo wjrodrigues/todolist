@@ -1,4 +1,4 @@
-package test
+package file
 
 import (
 	"testing"
@@ -7,7 +7,7 @@ import (
 )
 
 func TestMountFullPath(t *testing.T) {
-	path := FilePath(".env")
+	path := Path(".env")
 
 	assert.Equal(t, path, "/app/.env")
 }

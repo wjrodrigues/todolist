@@ -2,7 +2,7 @@ package configs
 
 import (
 	"testing"
-	"todolist/pkg/test"
+	"todolist/pkg/file"
 
 	"github.com/stretchr/testify/assert"
 
@@ -10,14 +10,14 @@ import (
 )
 
 func TestDBConnectionParamsIsValid(t *testing.T) {
-	values, err := LoadEnv(".", test.FilePath(".env"))
+	values, err := LoadEnv(".", file.Path(".env"))
 
 	assert.Nil(t, err)
 	assert.NotNil(t, DBConnection(values))
 }
 
 func TestDBConnectionParamsIsInValid(t *testing.T) {
-	values, _ := LoadEnv(".", test.FilePath(".env"))
+	values, _ := LoadEnv(".", file.Path(".env"))
 
 	values.DBDriver = ""
 
@@ -25,7 +25,7 @@ func TestDBConnectionParamsIsInValid(t *testing.T) {
 }
 
 func TestDBConnectionUserIsINvalid(t *testing.T) {
-	values, _ := LoadEnv(".", test.FilePath(".env"))
+	values, _ := LoadEnv(".", file.Path(".env"))
 
 	values.DBName = "any"
 

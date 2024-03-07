@@ -1,4 +1,4 @@
-package test
+package file
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func FilePath(fileName string) string {
+func Path(fileName string) string {
 	absolutePath, _ := os.Getwd()
 	basePath := strings.Split(absolutePath, "app")[0]
 
