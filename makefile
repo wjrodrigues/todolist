@@ -1,7 +1,7 @@
 pwd := $(shell pwd)
 
-.SILENT: infra api start cover migrate-up
-.PHONY: infra api start cover migrate-up
+.SILENT: infra api start cover migrate-up migrate-down
+.PHONY: infra api start cover migrate-up migrate-down
 
 infra:
 	docker network create todolist || true
@@ -38,3 +38,4 @@ migrate-down:
 start:
 	make infra
 	make api
+	make migrate-up
