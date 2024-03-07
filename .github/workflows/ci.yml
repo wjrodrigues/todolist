@@ -21,7 +21,7 @@ jobs:
       - name: Run docker
         run: |
           docker network create todolist || true
-          docker-compose -f docker/docker-compose.yml up -d --build
+          docker-compose -f docker/docker-compose-ci.yml up -d --build
 
       - name: Run migrations
         run: |
