@@ -33,10 +33,10 @@ migrate-up:
 migrate-down:
 	echo "Migrate down dev 🛠️"
 	docker compose -f docker/docker-compose.yml up -d todolist-migrate
-	docker exec todolist-migrate sh -c 'migrate -path ./migrations -database "postgresql://$${DB_USER}:$${DB_PASSWORD}@$${DB_HOST}:$${DB_PORT}/$${DB_NAME}?sslmode=disable" -verbose down -all'
+	docker exec todolist-migrate sh -c 'migrate -path ./migrations -database "postgresql://$${DB_USER}:$${DB_PASSWORD}@$${DB_HOST}:$${DB_PORT}/$${DB_NAME}?sslmode=disable" -verbose down 1'
 
 	echo "Migrate down test 🚧"
-	docker exec todolist-migrate sh -c 'migrate -path ./migrations -database "postgresql://$${DB_USER}:$${DB_PASSWORD}@$${DB_HOST}:$${DB_PORT}/$${DB_NAME}_test?sslmode=disable" -verbose down -all'
+	docker exec todolist-migrate sh -c 'migrate -path ./migrations -database "postgresql://$${DB_USER}:$${DB_PASSWORD}@$${DB_HOST}:$${DB_PORT}/$${DB_NAME}_test?sslmode=disable" -verbose down 1'
 	echo "Finish ✅"
 
 start:
