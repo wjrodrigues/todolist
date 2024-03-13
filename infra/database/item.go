@@ -15,7 +15,9 @@ func NewItemDB(db *sql.DB) *ItemDB {
 }
 
 func (u *ItemDB) Create(item *entity.Item) error {
-	err := u.DB.QueryRow(`INSERT INTO items (id, title, description, status) VALUES ($1, $2, $3, $4);`, item.ID, item.Title, item.Description, item.Status).Err()
+	err := u.DB.QueryRow(
+		`INSERT INTO items (id, title, description, status, list_id) VALUES ($1, $2, $3, $4, $5);`,
+		item.ID, item.Title, item.Description, item.Status, item.List.ID.String()).Err()
 
 	if err != nil {
 		return err
