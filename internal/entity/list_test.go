@@ -10,7 +10,8 @@ import (
 func TestNewList(t *testing.T) {
 	item := NewItem("Pay bankslip", "any item", "pending")
 	items := []Item{*item}
-	list := NewList("Pay bankslips", "any list", "in_progress", items)
+	owner, _ := NewUser("Pedro", "pedro@email.com", "123")
+	list := NewList("Pay bankslips", "any list", "in_progress", items, *owner)
 
 	assert.NotNil(t, list)
 	assert.NotEmpty(t, list.ID)
