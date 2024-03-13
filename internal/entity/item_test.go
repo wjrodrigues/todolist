@@ -8,7 +8,8 @@ import (
 )
 
 func TestNewItem(t *testing.T) {
-	item := NewItem("Pay bankslip", "any", "pending")
+	list := NewList("Spending", "any", "pending", User{})
+	item := NewItem("Pay bankslip", "any", "pending", *list)
 
 	assert.NotNil(t, item)
 	assert.NotEmpty(t, item.ID)

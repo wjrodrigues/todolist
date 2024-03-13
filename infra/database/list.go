@@ -15,7 +15,9 @@ func NewListDB(db *sql.DB) *ListDB {
 }
 
 func (u *ListDB) Create(list *entity.List) error {
-	err := u.DB.QueryRow(`INSERT INTO lists (id, title, description, status) VALUES ($1, $2, $3, $4);`, list.ID, list.Title, list.Description, list.Status).Err()
+	err := u.DB.QueryRow(
+		`INSERT INTO lists (id, title, description, status, owner_id) VALUES ($1, $2, $3, $4, $5);`,
+		list.ID, list.Title, list.Description, list.Status, list.Owner.ID.String()).Err()
 
 	if err != nil {
 		return err

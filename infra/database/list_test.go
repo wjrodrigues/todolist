@@ -11,20 +11,29 @@ import (
 
 func TestCreateAndDeleteListWithSuccess(t *testing.T) {
 	listDB := NewListDB(test.Conn(t))
-	list := entity.NewList("Title list", "Description list", "pending", []entity.Item{})
+	userDB := NewUserDB(test.Conn(t))
+	owner, _ := entity.NewUser("Pedro", "pedro@email.com", "123")
+	list := entity.NewList("Title list", "Description list", "pending", *owner)
 
+	userDB.Create(owner)
 	err := listDB.Create(list)
 
 	assert.Nil(t, err)
 
 	t.Cleanup(func() {
 		listDB.Delete(list.ID)
+		userDB.Delete(owner.Email)
 	})
 }
 
 func TestCreateListWithFailed(t *testing.T) {
 	listDB := NewListDB(test.Conn(t))
-	list := entity.NewList("Title list", "Description list", "pending", []entity.Item{})
+	userDB := NewUserDB(test.Conn(t))
+	owner, _ := entity.NewUser("Pedro", "pedro@email.com", "123")
+	list := entity.NewList("Title list", "Description list", "pending", *owner)
+
+	userDB.Create(owner)
+	listDB.Create(list)
 
 	listDB.Create(list)
 	err := listDB.Create(list)
@@ -33,6 +42,7 @@ func TestCreateListWithFailed(t *testing.T) {
 
 	t.Cleanup(func() {
 		listDB.Delete(list.ID)
+		userDB.Delete(owner.Email)
 	})
 }
 
@@ -46,27 +56,32 @@ func TestDeletListWithFailed(t *testing.T) {
 }
 
 func TestFindListByIdWithSuccess(t *testing.T) {
-	itemDB := NewListDB(test.Conn(t))
-	item := entity.NewList("Title list", "Description list", "pending", []entity.Item{})
+	listDB := NewListDB(test.Conn(t))
+	userDB := NewUserDB(test.Conn(t))
+	owner, _ := entity.NewUser("Pedro", "pedro@email.com", "123")
+	list := entity.NewList("Title list", "Description list", "pending", *owner)
 
-	itemDB.Create(item)
+	userDB.Create(owner)
+	listDB.Create(list)
 
-	result, err := itemDB.FindById(item.ID)
+	result, err := listDB.FindById(list.ID)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, result.ID)
-	assert.Equal(t, result.Title, item.Title)
-	assert.Equal(t, result.Description, item.Description)
-	assert.Equal(t, result.Status, item.Status)
+	assert.Equal(t, result.Title, list.Title)
+	assert.Equal(t, result.Description, list.Description)
+	assert.Equal(t, result.Status, list.Status)
 
 	t.Cleanup(func() {
-		itemDB.Delete(item.ID)
+		listDB.Delete(list.ID)
+		userDB.Delete(owner.Email)
 	})
 }
 
 func TestFindListByIdNotFound(t *testing.T) {
 	listDB := NewListDB(test.Conn(t))
-	list := entity.NewList("Title list", "Description list", "pending", []entity.Item{})
+	owner, _ := entity.NewUser("Pedro", "pedro@email.com", "123")
+	list := entity.NewList("Title list", "Description list", "pending", *owner)
 
 	result, err := listDB.FindById(list.ID)
 
