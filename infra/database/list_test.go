@@ -13,7 +13,7 @@ func TestCreateAndDeleteListWithSuccess(t *testing.T) {
 	listDB := NewListDB(test.Conn(t))
 	userDB := NewUserDB(test.Conn(t))
 	owner, _ := entity.NewUser("Pedro", "pedro@email.com", "123")
-	list := entity.NewList("Title list", "Description list", "pending", []entity.Item{}, *owner)
+	list := entity.NewList("Title list", "Description list", "pending", *owner)
 
 	userDB.Create(owner)
 	err := listDB.Create(list)
@@ -30,7 +30,7 @@ func TestCreateListWithFailed(t *testing.T) {
 	listDB := NewListDB(test.Conn(t))
 	userDB := NewUserDB(test.Conn(t))
 	owner, _ := entity.NewUser("Pedro", "pedro@email.com", "123")
-	list := entity.NewList("Title list", "Description list", "pending", []entity.Item{}, *owner)
+	list := entity.NewList("Title list", "Description list", "pending", *owner)
 
 	userDB.Create(owner)
 	listDB.Create(list)
@@ -59,7 +59,7 @@ func TestFindListByIdWithSuccess(t *testing.T) {
 	listDB := NewListDB(test.Conn(t))
 	userDB := NewUserDB(test.Conn(t))
 	owner, _ := entity.NewUser("Pedro", "pedro@email.com", "123")
-	list := entity.NewList("Title list", "Description list", "pending", []entity.Item{}, *owner)
+	list := entity.NewList("Title list", "Description list", "pending", *owner)
 
 	userDB.Create(owner)
 	listDB.Create(list)
@@ -81,7 +81,7 @@ func TestFindListByIdWithSuccess(t *testing.T) {
 func TestFindListByIdNotFound(t *testing.T) {
 	listDB := NewListDB(test.Conn(t))
 	owner, _ := entity.NewUser("Pedro", "pedro@email.com", "123")
-	list := entity.NewList("Title list", "Description list", "pending", []entity.Item{}, *owner)
+	list := entity.NewList("Title list", "Description list", "pending", *owner)
 
 	result, err := listDB.FindById(list.ID)
 
