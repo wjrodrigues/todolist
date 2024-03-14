@@ -1,33 +1,28 @@
-package entity
+package item
 
 import (
 	"time"
 	"todolist/pkg/entity"
 )
 
-type List struct {
+type Item struct {
 	ID          entity.ID
 	Title       string
 	Description string
 	Status      string
-	Owner       User
-	Items       []Item
+	ListId      entity.ID
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 }
 
-func NewList(title, description, status string, owner User) *List {
-	return &List{
+func NewItem(title, description, status string, listId entity.ID) *Item {
+	return &Item{
 		ID:          entity.NewID(),
 		Title:       title,
 		Description: description,
 		Status:      status,
-		Owner:       owner,
+		ListId:      listId,
 		CreatedAt:   time.Now(),
 		UpdatedAt:   time.Now(),
 	}
-}
-
-func (l *List) AddItem(item Item) {
-	l.Items = append(l.Items, item)
 }

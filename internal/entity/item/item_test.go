@@ -1,15 +1,15 @@
-package entity
+package item
 
 import (
 	"testing"
 	"time"
+	"todolist/pkg/entity"
 
 	"github.com/stretchr/testify/assert"
 )
 
 func TestNewItem(t *testing.T) {
-	list := NewList("Spending", "any", "pending", User{})
-	item := NewItem("Pay bankslip", "any", "pending", *list)
+	item := NewItem("Pay bankslip", "any", "pending", entity.NewID())
 
 	assert.NotNil(t, item)
 	assert.NotEmpty(t, item.ID)
