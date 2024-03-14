@@ -1,8 +1,8 @@
-package database
+package item
 
 import (
 	"database/sql"
-	"todolist/internal/entity"
+	"todolist/internal/entity/item"
 	uuid "todolist/pkg/entity"
 )
 
@@ -14,10 +14,10 @@ func NewItemDB(db *sql.DB) *ItemDB {
 	return &ItemDB{DB: db}
 }
 
-func (u *ItemDB) Create(item *entity.Item) error {
+func (u *ItemDB) Create(item *item.Item) error {
 	err := u.DB.QueryRow(
 		`INSERT INTO items (id, title, description, status, list_id) VALUES ($1, $2, $3, $4, $5);`,
-		item.ID, item.Title, item.Description, item.Status, item.List.ID.String()).Err()
+		item.ID, item.Title, item.Description, item.Status, item.ListId).Err()
 
 	if err != nil {
 		return err
@@ -36,8 +36,8 @@ func (u *ItemDB) Delete(id uuid.ID) error {
 	return nil
 }
 
-func (u *ItemDB) FindById(id uuid.ID) (*entity.Item, error) {
-	item := entity.Item{}
+func (u *ItemDB) FindById(id uuid.ID) (*item.Item, error) {
+	item := item.Item{}
 
 	row := u.DB.QueryRow(`SELECT id, title, description, status FROM items WHERE id = $1;`, id)
 

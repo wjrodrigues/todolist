@@ -1,8 +1,8 @@
-package database
+package user
 
 import (
 	"testing"
-	"todolist/internal/entity"
+	"todolist/internal/entity/user"
 	"todolist/pkg/test"
 
 	"github.com/stretchr/testify/assert"
@@ -10,7 +10,7 @@ import (
 
 func TestCreateAndDeleteUserWithSuccess(t *testing.T) {
 	userDB := NewUserDB(test.Conn(t))
-	user, _ := entity.NewUser("Paulo", "paulo@gmail.com", "123456")
+	user, _ := user.NewUser("Paulo", "user_test@gmail.com", "123456")
 
 	err := userDB.Create(user)
 
@@ -23,7 +23,7 @@ func TestCreateAndDeleteUserWithSuccess(t *testing.T) {
 
 func TestCreateWithFailed(t *testing.T) {
 	userDB := NewUserDB(test.Conn(t))
-	user, _ := entity.NewUser("Paulo", "paulo@gmail.com", "123456")
+	user, _ := user.NewUser("Paulo", "user_test@gmail.com", "123456")
 
 	userDB.Create(user)
 	err := userDB.Create(user)
@@ -39,14 +39,14 @@ func TestDeleteWithFailed(t *testing.T) {
 	userDB := NewUserDB(test.Conn(t))
 	userDB.DB.Close()
 
-	err := userDB.Delete("paulo@gmail.com")
+	err := userDB.Delete("user_test@gmail.com")
 
 	assert.NotNil(t, err)
 }
 
 func TestFindByEmailOrIdWithSuccess(t *testing.T) {
 	userDB := NewUserDB(test.Conn(t))
-	user, _ := entity.NewUser("Maria", "maria@gmail.com", "123456")
+	user, _ := user.NewUser("Maria", "user_test@gmail.com", "123456")
 
 	userDB.Create(user)
 
@@ -75,7 +75,7 @@ func TestFindByEmailOrIdWithSuccess(t *testing.T) {
 
 func TestFindByEmailOrIdNotFound(t *testing.T) {
 	userDB := NewUserDB(test.Conn(t))
-	user, _ := entity.NewUser("Maria", "maria@gmail.com", "123456")
+	user, _ := user.NewUser("Maria", "user_test@gmail.com", "123456")
 
 	identifiers := []struct {
 		Id    string
