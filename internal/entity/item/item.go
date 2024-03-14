@@ -5,6 +5,13 @@ import (
 	"todolist/pkg/entity"
 )
 
+const (
+	PENDING     = "pending"
+	IN_PROGRESS = "in_progress"
+	CANCELED    = "canceled"
+	COMPLETED   = "completed"
+)
+
 type Item struct {
 	ID          entity.ID
 	Title       string
@@ -25,4 +32,20 @@ func NewItem(title, description, status string, listId entity.ID) *Item {
 		CreatedAt:   time.Now(),
 		UpdatedAt:   time.Now(),
 	}
+}
+
+func (i *Item) Pending() {
+	i.Status = PENDING
+}
+
+func (i *Item) InProgress() {
+	i.Status = IN_PROGRESS
+}
+
+func (i *Item) Canceled() {
+	i.Status = CANCELED
+}
+
+func (i *Item) Completed() {
+	i.Status = COMPLETED
 }
