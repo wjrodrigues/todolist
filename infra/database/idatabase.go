@@ -18,6 +18,7 @@ type IItem interface {
 	Create(item *item.Item) error
 	Delete(id uuid.ID) error
 	FindById(id uuid.ID) (*item.Item, error)
+	UpdateStatus(item item.Item) error
 }
 
 type IList interface {

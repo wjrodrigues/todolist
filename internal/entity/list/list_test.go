@@ -12,18 +12,18 @@ import (
 
 func TestNewList(t *testing.T) {
 	owner, _ := user.NewUser("Pedro", "pedro@email.com", "123")
-	list := NewList("Pay bankslips", "any list", "in_progress", *owner)
+	list := NewList("Pay bankslips", "any list", IN_PROGRESS, *owner)
 
 	assert.NotNil(t, list)
 	assert.NotEmpty(t, list.ID)
 	assert.Equal(t, list.Title, "Pay bankslips")
 	assert.Equal(t, list.Description, "any list")
-	assert.Equal(t, list.Status, "in_progress")
+	assert.Equal(t, list.Status, IN_PROGRESS)
 }
 
 func TestAddItem(t *testing.T) {
 	owner, _ := user.NewUser("Pedro", "pedro@email.com", "123")
-	list := NewList("Pay bankslips", "any list", "in_progress", *owner)
+	list := NewList("Pay bankslips", "any list", IN_PROGRESS, *owner)
 	itemInstance := item.NewItem("Pay bankslip", "any item", "pending", entity.NewID())
 
 	list.AddItem(*itemInstance)

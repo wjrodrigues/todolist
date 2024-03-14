@@ -5,6 +5,7 @@ import (
 	listDb "todolist/infra/database/pg/list"
 	userDb "todolist/infra/database/pg/user"
 	"todolist/internal/entity/item"
+	"todolist/internal/entity/list"
 	listEntity "todolist/internal/entity/list"
 	userEntity "todolist/internal/entity/user"
 	uuid "todolist/pkg/entity"
@@ -18,10 +19,10 @@ func TestCreateAndDeleteItemWithSuccess(t *testing.T) {
 	user, _ := userEntity.NewUser("Pedro", "item_test@email.com", "123")
 
 	listDB := listDb.NewListDB(test.Conn(t))
-	list := listEntity.NewList("Pay bankslips", "any list", "in_progress", *user)
+	list := listEntity.NewList("Pay bankslips", "any list", listEntity.IN_PROGRESS, *user)
 
 	itemDB := NewItemDB(test.Conn(t))
-	item := item.NewItem("Title item", "Description item", "pending", list.ID)
+	item := item.NewItem("Title item", "Description item", item.PENDING, list.ID)
 
 	userDB.Create(user)
 	listDB.Create(list)
@@ -41,10 +42,10 @@ func TestCreateItemWithFailed(t *testing.T) {
 	user, _ := userEntity.NewUser("Pedro", "item_test@email.com", "123")
 
 	listDB := listDb.NewListDB(test.Conn(t))
-	list := listEntity.NewList("Pay bankslips", "any list", "in_progress", *user)
+	list := listEntity.NewList("Pay bankslips", "any list", listEntity.IN_PROGRESS, *user)
 
 	itemDB := NewItemDB(test.Conn(t))
-	item := item.NewItem("Title item", "Description item", "pending", list.ID)
+	item := item.NewItem("Title item", "Description item", item.PENDING, list.ID)
 
 	userDB.Create(user)
 	listDB.Create(list)
@@ -74,10 +75,10 @@ func TestFindItemByIdWithSuccess(t *testing.T) {
 	user, _ := userEntity.NewUser("Pedro", "item_test@email.com", "123")
 
 	listDB := listDb.NewListDB(test.Conn(t))
-	list := listEntity.NewList("Pay bankslips", "any list", "in_progress", *user)
+	list := listEntity.NewList("Pay bankslips", "any list", listEntity.IN_PROGRESS, *user)
 
 	itemDB := NewItemDB(test.Conn(t))
-	item := item.NewItem("Title item", "Description item", "pending", list.ID)
+	item := item.NewItem("Title item", "Description item", item.PENDING, list.ID)
 
 	userDB.Create(user)
 	listDB.Create(list)
@@ -100,10 +101,63 @@ func TestFindItemByIdWithSuccess(t *testing.T) {
 
 func TestFindItemByIdNotFound(t *testing.T) {
 	itemDB := NewItemDB(test.Conn(t))
-	item := item.NewItem("Title item", "Description item", "pending", uuid.NewID())
+	item := item.NewItem("Title item", "Description item", item.PENDING, uuid.NewID())
 
 	result, err := itemDB.FindById(item.ID)
 
 	assert.NotNil(t, err)
 	assert.Nil(t, result)
+}
+
+func TestUpdateStatusItemWithSuccess(t *testing.T) {
+	userDB := userDb.NewUserDB(test.Conn(t))
+	user, _ := userEntity.NewUser("Pedro", "item_update_test@email.com", "123")
+	userDB.Create(user)
+
+	listDB := listDb.NewListDB(test.Conn(t))
+	list := listEntity.NewList("Pay bankslips", "any list", list.PENDING, *user)
+	listDB.Create(list)
+
+	itemDB := NewItemDB(test.Conn(t))
+	itemInstance := item.NewItem("Title item", "Description item", item.PENDING, list.ID)
+	itemDB.Create(itemInstance)
+
+	itemInstance.Completed()
+	err := itemDB.UpdateStatus(*itemInstance)
+	assert.Nil(t, err)
+
+	itemInstance, _ = itemDB.FindById(itemInstance.ID)
+
+	assert.Equal(t, itemInstance.Status, item.COMPLETED)
+
+	t.Cleanup(func() {
+		itemDB.Delete(itemInstance.ID)
+		listDB.Delete(list.ID)
+		userDB.Delete(user.Email)
+	})
+}
+
+func TestUpdateStatusItemWithFailed(t *testing.T) {
+	userDB := userDb.NewUserDB(test.Conn(t))
+	user, _ := userEntity.NewUser("Pedro", "item_update_test@email.com", "123")
+	userDB.Create(user)
+
+	listDB := listDb.NewListDB(test.Conn(t))
+	list := listEntity.NewList("Pay bankslips", "any list", list.PENDING, *user)
+	listDB.Create(list)
+
+	itemDB := NewItemDB(test.Conn(t))
+	itemInstance := item.NewItem("Title item", "Description item", item.PENDING, list.ID)
+	itemDB.Create(itemInstance)
+
+	itemInstance.Status = "any"
+	err := itemDB.UpdateStatus(*itemInstance)
+
+	assert.Error(t, err)
+
+	t.Cleanup(func() {
+		itemDB.Delete(itemInstance.ID)
+		listDB.Delete(list.ID)
+		userDB.Delete(user.Email)
+	})
 }
