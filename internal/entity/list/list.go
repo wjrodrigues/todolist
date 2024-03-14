@@ -7,6 +7,13 @@ import (
 	"todolist/pkg/entity"
 )
 
+const (
+	PENDING     = "pending"
+	IN_PROGRESS = "in_progress"
+	CANCELED    = "canceled"
+	COMPLETED   = "completed"
+)
+
 type List struct {
 	ID          entity.ID
 	Title       string
