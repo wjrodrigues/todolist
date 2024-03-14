@@ -47,3 +47,13 @@ func (u *ItemDB) FindById(id uuid.ID) (*item.Item, error) {
 
 	return &item, nil
 }
+
+func (u *ItemDB) UpdateStatus(item item.Item) error {
+	err := u.DB.QueryRow(`UPDATE items SET status = $1 WHERE id = $2;`, item.Status, item.ID).Err()
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
