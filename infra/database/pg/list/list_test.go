@@ -1,8 +1,10 @@
-package database
+package list
 
 import (
 	"testing"
-	"todolist/internal/entity"
+	userDb "todolist/infra/database/pg/user"
+	"todolist/internal/entity/list"
+	userEntity "todolist/internal/entity/user"
 	uuid "todolist/pkg/entity"
 	"todolist/pkg/test"
 
@@ -11,9 +13,9 @@ import (
 
 func TestCreateAndDeleteListWithSuccess(t *testing.T) {
 	listDB := NewListDB(test.Conn(t))
-	userDB := NewUserDB(test.Conn(t))
-	owner, _ := entity.NewUser("Pedro", "pedro@email.com", "123")
-	list := entity.NewList("Title list", "Description list", "pending", *owner)
+	userDB := userDb.NewUserDB(test.Conn(t))
+	owner, _ := userEntity.NewUser("Pedro", "list_test@email.com", "123")
+	list := list.NewList("Title list", "Description list", "pending", *owner)
 
 	userDB.Create(owner)
 	err := listDB.Create(list)
@@ -28,9 +30,9 @@ func TestCreateAndDeleteListWithSuccess(t *testing.T) {
 
 func TestCreateListWithFailed(t *testing.T) {
 	listDB := NewListDB(test.Conn(t))
-	userDB := NewUserDB(test.Conn(t))
-	owner, _ := entity.NewUser("Pedro", "pedro@email.com", "123")
-	list := entity.NewList("Title list", "Description list", "pending", *owner)
+	userDB := userDb.NewUserDB(test.Conn(t))
+	owner, _ := userEntity.NewUser("Pedro", "list_test@email.com", "123")
+	list := list.NewList("Title list", "Description list", "pending", *owner)
 
 	userDB.Create(owner)
 	listDB.Create(list)
@@ -57,9 +59,9 @@ func TestDeletListWithFailed(t *testing.T) {
 
 func TestFindListByIdWithSuccess(t *testing.T) {
 	listDB := NewListDB(test.Conn(t))
-	userDB := NewUserDB(test.Conn(t))
-	owner, _ := entity.NewUser("Pedro", "pedro@email.com", "123")
-	list := entity.NewList("Title list", "Description list", "pending", *owner)
+	userDB := userDb.NewUserDB(test.Conn(t))
+	owner, _ := userEntity.NewUser("Pedro", "list_test@email.com", "123")
+	list := list.NewList("Title list", "Description list", "pending", *owner)
 
 	userDB.Create(owner)
 	listDB.Create(list)
@@ -80,8 +82,8 @@ func TestFindListByIdWithSuccess(t *testing.T) {
 
 func TestFindListByIdNotFound(t *testing.T) {
 	listDB := NewListDB(test.Conn(t))
-	owner, _ := entity.NewUser("Pedro", "pedro@email.com", "123")
-	list := entity.NewList("Title list", "Description list", "pending", *owner)
+	owner, _ := userEntity.NewUser("Pedro", "list_test@email.com", "123")
+	list := list.NewList("Title list", "Description list", "pending", *owner)
 
 	result, err := listDB.FindById(list.ID)
 
