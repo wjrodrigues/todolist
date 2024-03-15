@@ -25,4 +25,5 @@ type IList interface {
 	Create(list *list.List) error
 	Delete(id uuid.ID) error
 	FindById(id uuid.ID) (*list.List, error)
+	UpdateStatus(list list.List) error
 }

@@ -90,3 +90,46 @@ func TestFindListByIdNotFound(t *testing.T) {
 	assert.NotNil(t, err)
 	assert.Nil(t, result)
 }
+
+func TestUpdateStatusListWithSuccess(t *testing.T) {
+	userDB := userDb.NewUserDB(test.Conn(t))
+	user, _ := userEntity.NewUser("Pedro", "list_update_test@email.com", "123")
+	userDB.Create(user)
+
+	listDB := NewListDB(test.Conn(t))
+	listInstance := list.NewList("Pay bankslips", "any list", list.PENDING, *user)
+	listDB.Create(listInstance)
+
+	listInstance.Completed()
+	err := listDB.UpdateStatus(*listInstance)
+	assert.Nil(t, err)
+
+	listInstance, _ = listDB.FindById(listInstance.ID)
+
+	assert.Equal(t, listInstance.Status, list.COMPLETED)
+
+	t.Cleanup(func() {
+		listDB.Delete(listInstance.ID)
+		userDB.Delete(user.Email)
+	})
+}
+
+func TestUpdateStatusListWithFailed(t *testing.T) {
+	userDB := userDb.NewUserDB(test.Conn(t))
+	user, _ := userEntity.NewUser("Pedro", "list_update_test@email.com", "123")
+	userDB.Create(user)
+
+	listDB := NewListDB(test.Conn(t))
+	listInstance := list.NewList("Pay bankslips", "any list", list.PENDING, *user)
+	listDB.Create(listInstance)
+
+	listInstance.Status = "any"
+	err := listDB.UpdateStatus(*listInstance)
+
+	assert.Error(t, err)
+
+	t.Cleanup(func() {
+		listDB.Delete(listInstance.ID)
+		userDB.Delete(user.Email)
+	})
+}

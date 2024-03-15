@@ -47,3 +47,13 @@ func (u *ListDB) FindById(id uuid.ID) (*list.List, error) {
 
 	return &list, nil
 }
+
+func (u *ListDB) UpdateStatus(list list.List) error {
+	err := u.DB.QueryRow(`UPDATE lists SET status = $1 WHERE id = $2;`, list.Status, list.ID).Err()
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
