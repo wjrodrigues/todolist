@@ -20,7 +20,7 @@ type List struct {
 	Description string
 	Status      string
 	Owner       user.User
-	Items       []item.Item
+	Items       []*item.Item
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 }
@@ -38,5 +38,40 @@ func NewList(title, description, status string, owner user.User) *List {
 }
 
 func (l *List) AddItem(item item.Item) {
-	l.Items = append(l.Items, item)
+	l.Items = append(l.Items, &item)
+}
+
+func (l *List) Pending() {
+	l.Status = PENDING
+	l.updateStatusItems()
+}
+
+func (l *List) InProgress() {
+	l.Status = IN_PROGRESS
+	l.updateStatusItems()
+}
+
+func (l *List) Canceled() {
+	l.Status = CANCELED
+	l.updateStatusItems()
+}
+
+func (l *List) Completed() {
+	l.Status = COMPLETED
+	l.updateStatusItems()
+}
+
+func (l *List) updateStatusItems() {
+	for _, item := range l.Items {
+		switch l.Status {
+		case PENDING:
+			item.Pending()
+		case IN_PROGRESS:
+			item.InProgress()
+		case COMPLETED:
+			item.Completed()
+		case CANCELED:
+			item.Canceled()
+		}
+	}
 }
