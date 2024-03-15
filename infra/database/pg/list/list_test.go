@@ -114,7 +114,7 @@ func TestUpdateStatusListWithSuccess(t *testing.T) {
 	})
 }
 
-func TestUpdateStatusItemWithFailed(t *testing.T) {
+func TestUpdateStatusListWithFailed(t *testing.T) {
 	userDB := userDb.NewUserDB(test.Conn(t))
 	user, _ := userEntity.NewUser("Pedro", "list_update_test@email.com", "123")
 	userDB.Create(user)
