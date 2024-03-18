@@ -10,7 +10,6 @@ import (
 
 type IUser interface {
 	Create(user *user.User) error
-	Delete(email string) error
 	FindByEmailOrId(id, email string) (*user.User, error)
 }
 
