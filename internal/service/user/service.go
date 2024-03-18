@@ -7,7 +7,7 @@ import (
 
 type IUserService interface {
 	Create(user *entity.User) error
-	FindByEmailOrId(id, email string) (*entity.User, error)
+	Find(value string) (*entity.User, error)
 }
 
 type UserService struct {

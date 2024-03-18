@@ -12,7 +12,7 @@ import (
 
 func TestCreateAndFindUsertWithSuccess(t *testing.T) {
 	userDB := userDb.NewUserDB(test.Conn(t))
-	user, _ := userEntity.NewUser("Pedro", "service_create_list@email.com", "123")
+	user, _ := userEntity.NewUser("Pedro", "service_create_user@email.com", "123")
 
 	service := NewUserService(userDB)
 
@@ -30,7 +30,7 @@ func TestCreateAndFindUsertWithSuccess(t *testing.T) {
 
 func TestCreateUsertWithFail(t *testing.T) {
 	userDB := userDb.NewUserDB(test.Conn(t))
-	user, _ := userEntity.NewUser("Pedro", "service_create_list@email.com", "123")
+	user, _ := userEntity.NewUser("Pedro", "service_create_user@email.com", "123")
 
 	service := NewUserService(userDB)
 
