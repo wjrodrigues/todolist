@@ -14,6 +14,12 @@ type Error struct {
 	Message string `json:"message"`
 }
 
+func Response(w http.ResponseWriter, status int, value interface{}) {
+	w.WriteHeader(status)
+
+	json.NewEncoder(w).Encode(value)
+}
+
 func ResponseError(w http.ResponseWriter, status int, message string) {
 	w.WriteHeader(status)
 
@@ -22,4 +28,8 @@ func ResponseError(w http.ResponseWriter, status int, message string) {
 
 func ResponseHeader(w http.ResponseWriter, status int) {
 	w.WriteHeader(status)
+}
+
+func Header(w http.ResponseWriter, key, value string) {
+	w.Header().Set(key, value)
 }
