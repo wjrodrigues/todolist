@@ -63,7 +63,7 @@ func TestFindByEmailOrIdWithSuccess(t *testing.T) {
 
 		assert.Nil(t, err)
 		assert.NotNil(t, result.ID)
-		assert.Empty(t, result.Password)
+		assert.NotEmpty(t, result.Password)
 		assert.Equal(t, result.Email, user.Email)
 		assert.Equal(t, result.Name, user.Name)
 	}
