@@ -14,6 +14,7 @@ type env struct {
 	DBPassword    string `mapstructure:"DB_PASSWORD"`
 	DBName        string `mapstructure:"DB_NAME"`
 	WebServerPort string `mapstructure:"WEB_SERVER_PORT"`
+	Secret        string `mapstructure:"SECRET"`
 }
 
 func LoadEnv(path, file string) (env, error) {

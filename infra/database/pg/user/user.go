@@ -36,9 +36,9 @@ func (u *UserDB) Delete(email string) error {
 func (u *UserDB) FindByEmailOrId(id, email string) (*user.User, error) {
 	user := user.User{}
 
-	row := u.DB.QueryRow(`SELECT id, name, email FROM users WHERE id = $1 OR email = $2;`, id, email)
+	row := u.DB.QueryRow(`SELECT id, name, email, password FROM users WHERE id = $1 OR email = $2;`, id, email)
 
-	if err := row.Scan(&user.ID, &user.Name, &user.Email); err != nil {
+	if err := row.Scan(&user.ID, &user.Name, &user.Email, &user.Password); err != nil {
 		return nil, err
 	}
 

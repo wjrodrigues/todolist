@@ -26,3 +26,7 @@ func NewUser(name, email, password string) (*User, error) {
 		Password: string(hash),
 	}, nil
 }
+
+func (u *User) ValidatePassword(password string) bool {
+	return security.CompareHashAndPassword(u.Password, password)
+}
