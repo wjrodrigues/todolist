@@ -23,3 +23,10 @@ func TestNewUser(t *testing.T) {
 	assert.NotNil(t, err)
 	assert.Error(t, err, "bcrypt: password length exceeds 72 bytes")
 }
+
+func TestValidatePassword(t *testing.T) {
+	user, _ := NewUser("John Doe", "john@gmail.com", "123456")
+
+	assert.True(t, user.ValidatePassword("123456"))
+	assert.False(t, user.ValidatePassword("123"))
+}
