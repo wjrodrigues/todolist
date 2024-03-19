@@ -23,3 +23,13 @@ func TestGenerateFromPasswordFailedWhenLongPassword(t *testing.T) {
 	assert.Error(t, err)
 	assert.Empty(t, hash)
 }
+
+func TestCompareHashAndPassword(t *testing.T) {
+	hash, _ := GenerateFromPassword("123")
+	password := "123"
+
+	assert.True(t, CompareHashAndPassword(hash, password))
+
+	hash, _ = GenerateFromPassword("12")
+	assert.False(t, CompareHashAndPassword(hash, password))
+}
