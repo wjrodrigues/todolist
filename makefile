@@ -1,7 +1,7 @@
 pwd := $(shell pwd)
 
-.SILENT: infra api start cover migrate-up migrate-down cover-html
-.PHONY: infra api start cover migrate-up migrate-down cover-html
+.SILENT: infra api start cover migrate-up migrate-down cover-html web
+.PHONY: infra api start cover migrate-up migrate-down cover-html web
 
 infra:
 	docker network create todolist || true
@@ -12,6 +12,9 @@ infra:
 api:
 	cp ${pwd}/.env-example .env
 	echo "Finish ✅"
+
+web:
+	cd web && npm run dev
 
 cover:
 	docker exec -u dev todolist-api sh -c "go test ./... -cover -coverprofile cover.out"
